@@ -1,5 +1,6 @@
 package com.example.financetracker.data.db.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -65,7 +66,7 @@ interface TransactionDao {
     ): Flow<Map<String, Double>>
 
     //For recurrent transactions
-    @Query("SELECT * FROM transactions WHERE isRecurring = 1")
+    @Query("SELECT * FROM transactions WHERE recurring = 1")
     fun getRecurringTransactions(): Flow<List<Transaction>>
 
     //Update account
@@ -83,4 +84,8 @@ interface TransactionDao {
         LIMIT 12
     """)
     fun getMonthlySummary(type: String): Flow<Map<String, Double>>
+
+    //Pagination
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
+    fun getTransactionsPaged(): PagingSource<Int, Transaction>
 }

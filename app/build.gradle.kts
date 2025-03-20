@@ -49,6 +49,7 @@ dependencies {
 
     //Room Database
     implementation (libs.androidx.room.runtime)
+    implementation(libs.androidx.paging.common.android)
     ksp (libs.androidx.room.compiler)
 
     //Graphics
