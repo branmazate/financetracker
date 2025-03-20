@@ -46,4 +46,15 @@ interface AccountDao {
     """)
     suspend fun convertCurrency(originalCurrency: String, conversionRate: Double)
 
+    //Get accounts with recent activity
+    @Transaction
+    @Query("""
+        SELECT * FROM bank_accounts
+        WHERE id IN (
+        SELECT DISTINCT id
+        FROM transactions
+        WHERE date BETWEEN :start AND :end
+        )
+    """)
+    fun getAccountsWithRecentActivity(start: Long, end: Long): Flow<List<AccountWithTransactions>>
 }
