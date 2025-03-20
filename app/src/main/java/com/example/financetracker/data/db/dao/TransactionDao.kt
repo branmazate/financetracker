@@ -88,4 +88,12 @@ interface TransactionDao {
     //Pagination
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getTransactionsPaged(): PagingSource<Int, Transaction>
+
+    //Full-text search
+    @Query("""SELECT * FROM transactions 
+        WHERE description LIKE '%' || :query || '%'
+        OR category LIKE '%' || :query || '%'
+        """)
+    fun searchTransactions(query: String): Flow<List<Transaction>>
+
 }
