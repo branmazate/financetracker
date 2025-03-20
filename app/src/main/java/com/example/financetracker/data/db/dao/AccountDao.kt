@@ -34,7 +34,7 @@ interface AccountDao {
     @Query("""
         SELECT SUM(balance)
         FROM bank_accounts
-        WHERE currency := currency
+        WHERE currency = :currency
     """)
     suspend fun getTotalBalanceByCurrency(currency: String): Double
 
@@ -42,7 +42,7 @@ interface AccountDao {
     @Query("""
         UPDATE bank_accounts
         SET balance = balance * :conversionRate
-        WHERE currency := originalCurrency
+        WHERE currency = :originalCurrency
     """)
     suspend fun convertCurrency(originalCurrency: String, conversionRate: Double)
 
@@ -57,4 +57,14 @@ interface AccountDao {
         )
     """)
     fun getAccountsWithRecentActivity(start: Long, end: Long): Flow<List<AccountWithTransactions>>
+
+    //Validations in operations
+    @Update
+    suspend fun updateAccountSafely(account: BankAccount){
+        if (account.balance < 0 && account.type != BankAccount.AccountType.CREDIT_CARD)
+        {
+            throw IllegalArgumentException("Negative balance not allowed for this kind of account")
+        }
+        update(account)
+    }
 }
