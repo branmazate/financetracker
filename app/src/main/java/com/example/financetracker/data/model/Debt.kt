@@ -19,6 +19,7 @@ data class Debt(
     val interestRate: Double = 0.0,
     val startDate: Date,
     val endDate: Date,
+    val dueDate: Date,
     val payments: List<Payment> = emptyList(),
     val status: DebtStatus = DebtStatus.ACTIVE
 ) {
