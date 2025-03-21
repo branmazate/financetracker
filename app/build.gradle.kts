@@ -55,7 +55,10 @@ dependencies {
     //Graphics
     implementation (libs.mpandroidchart)
 
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.gson)
+
+    implementation (libs.hilt.android)
+    ksp (libs.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
