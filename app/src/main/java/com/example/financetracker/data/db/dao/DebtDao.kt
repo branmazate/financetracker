@@ -3,6 +3,7 @@ package com.example.financetracker.data.db.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.financetracker.data.model.Debt
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DebtDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(debt: Debt): Long
 
     @Update
@@ -47,9 +48,17 @@ interface DebtDao {
     //Update debt status
     @Query("""
         UPDATE debts
-        SET remainingAmount = remainingAmount * (1 + interestRate)/100)
+        SET remainingAmount = remainingAmount * (1 + interestRate)/100
         WHERE status = 'ACTIVE'
         AND dueDate < :currentDate
     """)
     fun updateDebtStatus(currentDate: Long)
+    abstract fun getActiveDebts(): Flow<List<Debt>>
+
+    //Get debt by id
+    @Query("""
+        SELECT * FROM debts
+        WHERE id = :debtId
+    """)
+    fun getDebtById(debtId: Long): Flow<Debt>
 }
