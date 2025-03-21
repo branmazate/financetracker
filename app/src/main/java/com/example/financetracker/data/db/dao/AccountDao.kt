@@ -67,4 +67,11 @@ interface AccountDao {
         }
         update(account)
     }
+
+    //Get account by Id
+    @Query("""
+        SELECT * FROM bank_accounts
+        WHERE id = :accountId
+    """)
+    suspend fun getAccountById(accountId: Long): BankAccount
 }
