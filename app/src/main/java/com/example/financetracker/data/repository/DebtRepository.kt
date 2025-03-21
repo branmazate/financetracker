@@ -3,6 +3,7 @@ package com.example.financetracker.data.repository
 import com.example.financetracker.data.db.dao.DebtDao
 import com.example.financetracker.data.model.Debt
 import com.example.financetracker.utils.ValidationHelper
+import kotlinx.coroutines.flow.Flow
 import java.util.Date
 import javax.inject.Inject
 
@@ -37,10 +38,11 @@ class DebtRepositoryImpl @Inject constructor(
         interestRate: Double
     ) {
         if (!ValidationHelper.isValidDebt(
-                debt=debt,
+                debt = debt,
                 totalAmount = totalAmount,
                 interestRate = interestRate
-        )) {
+            )
+        ) {
             throw IllegalArgumentException("Invalid debt data")
         }
         val newDebt = Debt(
@@ -56,8 +58,15 @@ class DebtRepositoryImpl @Inject constructor(
             status = Debt.DebtStatus.ACTIVE
         )
         debtDao.insert(newDebt)
+    }
+    //Function to delete a debt
+    override suspend fun deleteDebt(debt: Debt) {
+        debtDao.delete(debt)
+    }
 
-
+    //Function to get all the debts
+    override fun getAllDebts(): Flow<List<Debt>> {
+        return debtDao.getAllDebts()
     }
 }
 interface DebtRepository{
@@ -71,4 +80,6 @@ interface DebtRepository{
         totalAmount: Double,
         interestRate: Double
     )
+    suspend fun deleteDebt(debt: Debt)
+    fun getAllDebts(): Flow<List<Debt>>
 }
