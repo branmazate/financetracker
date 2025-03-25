@@ -50,6 +50,9 @@ dependencies {
     //Room Database
     implementation (libs.androidx.room.runtime)
     implementation(libs.androidx.paging.common.android)
+    implementation(libs.androidx.hilt.common)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.firebase.functions.ktx)
     ksp (libs.androidx.room.compiler)
 
     //Graphics
