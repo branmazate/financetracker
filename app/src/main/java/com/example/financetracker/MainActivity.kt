@@ -11,11 +11,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.financetracker.data.sync.SyncWorker
 import com.example.financetracker.ui.theme.FinanceTrackerTheme
+import dagger.hilt.android.HiltAndroidApp
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@HiltAndroidApp
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var workManager: WorkManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        scheduleWorkers()
         enableEdgeToEdge()
         setContent {
             FinanceTrackerTheme {
@@ -27,6 +39,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun scheduleWorkers() {
+        val request = PeriodicWorkRequestBuilder<SyncWorker>(
+            24,
+            TimeUnit.HOURS
+        ).build()
+        workManager.enqueueUniquePeriodicWork(
+            "FinanceSyncWorker",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            request
+        )
     }
 }
 
