@@ -21,7 +21,9 @@ class FinanceSyncManager @Inject constructor(
     fun fullSync() {
         syncScope.launch {
             try {
-
+                syncAccounts()
+                syncTransactions()
+                syncDebts()
             } catch (e: Exception){
                 handleSyncError(e)
             }
@@ -34,6 +36,16 @@ class FinanceSyncManager @Inject constructor(
             val currentBalance = accountRepo.getAccountBalance(account.id)
             accountRepo.updateBalance(account.id, currentBalance)
         }
+    }
+
+    private suspend fun syncTransactions(){
+        val recurringTransactions = transactionRepo.getRecurringTransactions()
+        //TODO Add logic to update recurring transactions
+        }
+
+    private suspend fun syncDebts(){
+        val activeDebts = debtRepo.getActiveDebts().first()
+        //TODO Add logic to check if a debt is overdue and apply interest if so
     }
 
     private fun handleSyncError(error: Throwable){

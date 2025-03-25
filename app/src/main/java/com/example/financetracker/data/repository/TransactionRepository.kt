@@ -62,6 +62,9 @@ class TransactionRepositoryImpl @Inject constructor(
         //TODO Logic to schedule recurring transactions
     }
 
+    override suspend fun getRecurringTransactions(): Flow<List<Transaction>> {
+        return transactionDao.getRecurringTransactions()
+    }
     override suspend fun updateTransaction(transaction: Transaction) {
         val original = transactionDao.getTransactionById(transaction.id)
             ?: throw Exception("Transaction not found")
@@ -78,4 +81,5 @@ interface TransactionRepository {
     suspend fun addTransaction(transaction: Transaction)
     fun getMonthlyExpenseReport(): Flow<Map<String, Double>>
     suspend fun updateTransaction(transaction: Transaction)
+    suspend fun getRecurringTransactions(): Flow<List<Transaction>>
 }
