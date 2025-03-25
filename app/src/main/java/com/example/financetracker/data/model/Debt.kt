@@ -7,6 +7,8 @@ import com.example.financetracker.data.db.converters.DateConverter
 import com.example.financetracker.data.db.converters.PaymentListConverter
 import java.util.Date
 
+//TODO separate Debt and Payment entities in different databases
+
 @Entity(tableName = "debts")
 @TypeConverters(DateConverter::class, PaymentListConverter::class)
 data class Debt(

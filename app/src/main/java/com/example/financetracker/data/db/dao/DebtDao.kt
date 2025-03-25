@@ -53,6 +53,7 @@ interface DebtDao {
         AND dueDate < :currentDate
     """)
     fun updateDebtStatus(currentDate: Long)
+
     abstract fun getActiveDebts(): Flow<List<Debt>>
 
     //Get debt by id

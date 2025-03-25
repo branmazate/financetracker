@@ -68,6 +68,18 @@ class DebtRepositoryImpl @Inject constructor(
     override fun getAllDebts(): Flow<List<Debt>> {
         return debtDao.getAllDebts()
     }
+    //TODO add functions for updating debt status and apply payments.
+
+    override suspend fun applyPayment(
+        debtId: Long,
+        payment: Double,
+        //paymentDate: Date
+    ){
+        //TODO Add validation to check if the payment and the debt are valid
+
+        debtDao.applyPayment(debtId, payment)
+        //TODO Optimize so it register payment date
+    }
 }
 interface DebtRepository{
     suspend fun addNewDebt(
@@ -81,5 +93,6 @@ interface DebtRepository{
         interestRate: Double
     )
     suspend fun deleteDebt(debt: Debt)
+    suspend fun applyPayment(debtId: Long, payment: Double)
     fun getAllDebts(): Flow<List<Debt>>
 }
