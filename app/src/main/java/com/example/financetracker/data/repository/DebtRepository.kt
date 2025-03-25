@@ -84,6 +84,10 @@ class DebtRepositoryImpl @Inject constructor(
     override suspend fun getActiveDebts(): Flow<List<Debt>> {
         return debtDao.getActiveDebts()
     }
+
+    override suspend fun getTotalActiveDebts(): Double {
+        return debtDao.getTotalActiveDebt()
+    }
 }
 interface DebtRepository{
     suspend fun addNewDebt(
@@ -100,4 +104,5 @@ interface DebtRepository{
     suspend fun applyPayment(debtId: Long, payment: Double)
     fun getAllDebts(): Flow<List<Debt>>
     suspend fun getActiveDebts(): Flow<List<Debt>>
+    suspend fun getTotalActiveDebts(): Double
 }

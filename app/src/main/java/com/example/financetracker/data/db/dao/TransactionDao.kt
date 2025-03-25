@@ -85,6 +85,16 @@ interface TransactionDao {
     """)
     fun getMonthlySummary(type: String): Flow<Map<String, Double>>
 
+    //Get monthly income
+    @Query("""
+        SELECT SUM(amount) 
+        FROM transactions
+        WHERE type = 'INCOME'
+        AND recurring = 1
+        AND recurrenceInterval = 'MONTHLY'
+    """)
+    suspend fun getMonthlyIncome(): Double
+
     //Pagination
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getTransactionsPaged(): PagingSource<Int, Transaction>

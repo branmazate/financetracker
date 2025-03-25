@@ -74,6 +74,9 @@ class TransactionRepositoryImpl @Inject constructor(
         transactionDao.update(transaction)
     }
 
+    override suspend fun getMonthlyIncome(): Double {
+        return transactionDao.getMonthlyIncome()
+    }
 }
 
 interface TransactionRepository {
@@ -82,4 +85,5 @@ interface TransactionRepository {
     fun getMonthlyExpenseReport(): Flow<Map<String, Double>>
     suspend fun updateTransaction(transaction: Transaction)
     suspend fun getRecurringTransactions(): Flow<List<Transaction>>
+    suspend fun getMonthlyIncome(): Double
 }

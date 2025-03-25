@@ -35,7 +35,11 @@ interface DebtDao {
     fun getOverdueDebts(): Flow<List<Debt>>
 
     //Get the active debts and its payments
-    //TODO function to get active debts with payments
+    @Query("""
+        SELECT * FROM debts
+        WHERE status = 'ACTIVE'
+    """)
+    fun getActiveDebts(): Flow<List<Debt>>
 
     //Apply a payment
     @Query("""
@@ -54,12 +58,17 @@ interface DebtDao {
     """)
     fun updateDebtStatus(currentDate: Long)
 
-    abstract fun getActiveDebts(): Flow<List<Debt>>
-
     //Get debt by id
     @Query("""
         SELECT * FROM debts
         WHERE id = :debtId
     """)
     fun getDebtById(debtId: Long): Flow<Debt>
+
+    @Query("""
+        SELECT SUM(remainingAmount)
+        FROM debts
+        WHERE status = 'ACTIVE'
+    """)
+    fun getTotalActiveDebt(): Double
 }
