@@ -16,7 +16,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private val accountDao: AccountDao,
     private val ioDispatcher: CoroutineContext
 ) : TransactionRepository {
-    override suspend fun getAllTransactions(): Flow<List<Transaction>> {
+    override fun getAllTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransactions()
     }
 
@@ -74,7 +74,7 @@ class TransactionRepositoryImpl @Inject constructor(
 }
 
 interface TransactionRepository {
-    suspend fun getAllTransactions(): Flow<List<Transaction>>
+    fun getAllTransactions(): Flow<List<Transaction>>
     suspend fun addTransaction(transaction: Transaction)
     fun getMonthlyExpenseReport(): Flow<Map<String, Double>>
     suspend fun updateTransaction(transaction: Transaction)
