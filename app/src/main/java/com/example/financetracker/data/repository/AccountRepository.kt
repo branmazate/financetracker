@@ -36,6 +36,25 @@ class AccountRepositoryImpl @Inject constructor(
             )
         )
     }
+
+    override suspend fun getAccountBalance(
+        accountId:Long
+    ) :Double {
+        val account = accountDao.getAccountById(accountId)
+        return account.balance
+    }
+
+    override suspend fun updateBalance(
+        accountId: Long,
+        newBalance: Double
+    ){
+        val account = accountDao.getAccountById(accountId) ?: throw Exception("Account not found")
+        accountDao.update(
+            account.copy(
+                balance = newBalance
+            )
+        )
+    }
 }
 
 interface AccountRepository {
@@ -43,4 +62,6 @@ interface AccountRepository {
     suspend fun getAccountWithTransactions(accountId: Long): Flow<AccountWithTransactions>
     suspend fun createAccount(account: BankAccount): Long
     suspend fun convertCurrency(accountId: Long, newCurrency: String, exchangeRate: Double)
+    suspend fun getAccountBalance(accountId: Long):Double
+    suspend fun updateBalance(accountId: Long, newBalance: Double)
 }
