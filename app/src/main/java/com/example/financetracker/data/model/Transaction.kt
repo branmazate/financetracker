@@ -3,14 +3,13 @@ package com.example.financetracker.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import java.util.Date
 import com.example.financetracker.data.db.converters.DateConverter
+import java.util.Date
 
 @Entity(tableName = "transactions")
 @TypeConverters(DateConverter::class)
 data class Transaction(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val type: TransactionType, //Enum: Income or Expense
     val amount: Double,
     val date: Date,

@@ -1,6 +1,8 @@
 package com.example.financetracker.data.db
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.financetracker.data.db.converters.DateConverter
@@ -14,7 +16,8 @@ import com.example.financetracker.data.model.Transaction
 
 @Database(
     entities = [Transaction::class, BankAccount::class, Debt::class],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 
 @TypeConverters (DateConverter::class, PaymentListConverter::class)
@@ -24,6 +27,22 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun debtDao(): DebtDao
 
     companion object {
-        //TODO singleton pattern
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase{
+            return INSTANCE ?: synchronized(this) {
+
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase:: class.java,
+                    "finance_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+                instance
+            }
+        }
     }
 }

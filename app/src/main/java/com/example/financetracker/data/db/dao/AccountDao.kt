@@ -31,6 +31,7 @@ interface AccountDao {
     @Query("UPDATE bank_accounts SET balance = balance + :amount WHERE id = :accountId")
     suspend fun updateBalance(accountId: Long, amount: Double)
 
+    /* Not using different currencies right now so It will be for a future version.
     @Query("""
         SELECT SUM(balance)
         FROM bank_accounts
@@ -45,7 +46,8 @@ interface AccountDao {
         WHERE currency = :originalCurrency
     """)
     suspend fun convertCurrency(originalCurrency: String, conversionRate: Double)
-
+*/
+    /*
     //Get accounts with recent activity
     @Transaction
     @Query("""
@@ -57,7 +59,8 @@ interface AccountDao {
         )
     """)
     fun getAccountsWithRecentActivity(start: Long, end: Long): Flow<List<AccountWithTransactions>>
-
+     */
+/*
     //Validations in operations
     @Update
     suspend fun updateAccountSafely(account: BankAccount){
@@ -67,7 +70,7 @@ interface AccountDao {
         }
         update(account)
     }
-
+*/
     //Get account by Id
     @Query("""
         SELECT * FROM bank_accounts
