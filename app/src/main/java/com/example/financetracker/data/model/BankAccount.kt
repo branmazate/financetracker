@@ -9,7 +9,7 @@ data class BankAccount(
     val name: String,
     val type: AccountType,
     var balance: Double,
-    val currency: String,
+    val currency: String = "USD",
     val lastUpdated: Long = System.currentTimeMillis()
 ) {
     enum class AccountType {

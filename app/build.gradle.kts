@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.hilt.common)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.firebase.functions.ktx)
+    implementation(libs.androidx.junit.ktx)
     ksp (libs.androidx.room.compiler)
 
     //Graphics

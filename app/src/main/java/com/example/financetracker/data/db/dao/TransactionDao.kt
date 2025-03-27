@@ -42,6 +42,12 @@ interface TransactionDao {
    ): Flow<List<Transaction>>
 
    @Query("""
+       SELECT * FROM transactions
+       WHERE accountId = :accountId
+   """)
+   fun getTransactionsByAccountId(accountId: Long): Flow<List<Transaction>>
+
+   @Query("""
        SELECT SUM(amount) FROM transactions
        WHERE type = 'INCOME'
        AND accountId = :accountId

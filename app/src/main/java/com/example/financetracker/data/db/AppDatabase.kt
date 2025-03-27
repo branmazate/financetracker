@@ -33,13 +33,20 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase{
             return INSTANCE ?: synchronized(this) {
 
+                /*val migration1 = object : Migration(1,2){
+                    override fun migrate(db: SupportSQLiteDatabase){
+                        db.execSQL("ALTER TABLE transactions ADD COLUMN notes TEXT")
+                    }
+                }*/
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase:: class.java,
                     "finance_database"
                 )
+                    //.addMigrations(migration1)
                     .fallbackToDestructiveMigration()
                     .build()
+                    .also { INSTANCE = it }
                 INSTANCE = instance
                 instance
             }

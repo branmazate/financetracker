@@ -21,6 +21,7 @@ pagingCommonAndroid = "3.3.6"
 hiltCommon = "1.2.0"
 workRuntimeKtx = "2.10.0"
 firebaseFunctionsKtx = "21.2.0"
+junitKtx = "1.2.1"
 
 [libraries]
 androidx-activity-compose-v1101 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -50,6 +51,7 @@ androidx-paging-common-android = { group = "androidx.paging", name = "paging-com
 androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 firebase-functions-ktx = { group = "com.google.firebase", name = "firebase-functions-ktx", version.ref = "firebaseFunctionsKtx" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
