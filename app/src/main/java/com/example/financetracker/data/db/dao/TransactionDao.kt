@@ -74,7 +74,7 @@ interface TransactionDao {
     fun getExpenseSummaryByCategory(
         start: Long,
         end: Long
-    ): Flow<Map<String, Double>>
+    ): Flow<List<CategoryExpense>>
 
     //For recurrent transactions
     @Query("SELECT * FROM transactions WHERE recurring = 1")
