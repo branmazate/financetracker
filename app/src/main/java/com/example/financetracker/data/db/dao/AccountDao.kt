@@ -26,7 +26,7 @@ interface AccountDao {
 
     @Transaction
     @Query("SELECT * FROM bank_accounts WHERE id = :accountId")
-    suspend fun getAccountWithTransactions(accountId: Long): Flow<AccountWithTransactions>
+    fun getAccountWithTransactions(accountId: Long): Flow<AccountWithTransactions>
 
     @Query("UPDATE bank_accounts SET balance = balance + :amount WHERE id = :accountId")
     suspend fun updateBalance(accountId: Long, amount: Double)
