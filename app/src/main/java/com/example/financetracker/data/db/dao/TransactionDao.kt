@@ -1,6 +1,7 @@
 package com.example.financetracker.data.db.dao
 
 import androidx.paging.PagingSource
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -9,6 +10,10 @@ import androidx.room.Update
 import com.example.financetracker.data.model.Transaction
 import kotlinx.coroutines.flow.Flow
 
+data class CategoryExpense(
+    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "total") val total: Double
+)
 @Dao
 interface TransactionDao {
     //basic operations
@@ -57,7 +62,7 @@ interface TransactionDao {
         accountId: Long,
         startDate: Long,
         endDate: Long
-    )
+    ): Double
 
     @Query("""
         SELECT category, SUM(amount) AS total
@@ -69,7 +74,7 @@ interface TransactionDao {
     fun getExpenseSummaryByCategory(
         start: Long,
         end: Long
-    ): Flow<Map<String, Double>>
+    ): Flow<List<CategoryExpense>>
 
     //For recurrent transactions
     @Query("SELECT * FROM transactions WHERE recurring = 1")
@@ -78,18 +83,6 @@ interface TransactionDao {
     //Update account
     @Query("UPDATE transactions SET accountId = :newAccountId WHERE accountId = :oldAccountId")
     suspend fun updateAccount(oldAccountId: Long, newAccountId: Long)
-
-    //Get monthly summary
-    @Query("""
-        SELECT strftime('%Y-%m', date/1000, 'unixepoch') AS month, 
-        SUM(amount) AS total
-        FROM transactions
-        WHERE type = :type
-        GROUP BY month
-        ORDER BY month DESC
-        LIMIT 12
-    """)
-    fun getMonthlySummary(type: String): Flow<Map<String, Double>>
 
     //Get monthly income
     @Query("""

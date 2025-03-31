@@ -1,10 +1,13 @@
 package com.example.financetracker.data.repository
 
 import com.example.financetracker.data.db.dao.AccountDao
+import com.example.financetracker.data.db.dao.CategoryExpense
 import com.example.financetracker.data.db.dao.TransactionDao
 import com.example.financetracker.data.model.Transaction
+import com.example.financetracker.data.model.TransactionType
 import com.example.financetracker.utils.ValidationHelper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,8 +30,8 @@ class TransactionRepositoryImpl @Inject constructor(
 
             //Update balance of the associated account
             val amount = when (transaction.type) {
-                Transaction.TransactionType.INCOME -> transaction.amount
-                Transaction.TransactionType.EXPENSE -> -transaction.amount
+                TransactionType.INCOME -> transaction.amount
+                TransactionType.EXPENSE -> transaction.amount
             }
 
             accountDao.updateBalance(transaction.accountId, amount)
@@ -42,7 +45,7 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMonthlyExpenseReport(): Flow<Map<String, Double>> {
+    override fun getMonthlyExpenseReport(): Flow<List<CategoryExpense>> {
         val today = LocalDate.now()
         val startOfMonth = today
             .withDayOfMonth(1)
@@ -77,13 +80,23 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun getMonthlyIncome(): Double {
         return transactionDao.getMonthlyIncome()
     }
+
+    override suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>> {
+        return transactionDao.getExpenseSummaryByCategory(start, end)
+            .map { list: List<CategoryExpense> ->
+                list.associate { expense: CategoryExpense ->
+                    expense.category to expense.total
+                }
+            }
+    }
 }
 
 interface TransactionRepository {
     fun getAllTransactions(): Flow<List<Transaction>>
     suspend fun addTransaction(transaction: Transaction)
-    fun getMonthlyExpenseReport(): Flow<Map<String, Double>>
+    fun getMonthlyExpenseReport(): Flow<List<CategoryExpense>>
     suspend fun updateTransaction(transaction: Transaction)
     suspend fun getRecurringTransactions(): Flow<List<Transaction>>
     suspend fun getMonthlyIncome(): Double
+    suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>>
 }
