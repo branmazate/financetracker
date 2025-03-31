@@ -57,7 +57,7 @@ interface TransactionDao {
         accountId: Long,
         startDate: Long,
         endDate: Long
-    )
+    ): Double
 
     @Query("""
         SELECT category, SUM(amount) AS total
