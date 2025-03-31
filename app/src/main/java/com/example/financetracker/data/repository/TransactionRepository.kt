@@ -1,13 +1,17 @@
 package com.example.financetracker.data.repository
 
 import com.example.financetracker.data.db.dao.AccountDao
+import com.example.financetracker.data.db.dao.CategoryExpense
 import com.example.financetracker.data.db.dao.TransactionDao
 import com.example.financetracker.data.model.Transaction
 import com.example.financetracker.utils.ValidationHelper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlin.collections.associate
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.Collections.list
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -56,6 +60,14 @@ class TransactionRepositoryImpl @Inject constructor(
             .toInstant()
             .toEpochMilli()
         return transactionDao.getExpenseSummaryByCategory(startOfMonth, endOfMonth)
+    }
+
+    fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>> {
+        return transactionDao.getExpenseSummaryByCategory(start, end)
+            .map { list: List<CategoryExpense> ->
+                list.associate { it.category to it.total }.toMap()
+            }
+    }
     }
 
     private fun scheduleRecurringTransaction(original:Transaction){

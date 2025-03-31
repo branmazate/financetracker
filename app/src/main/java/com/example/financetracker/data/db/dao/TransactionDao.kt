@@ -1,6 +1,7 @@
 package com.example.financetracker.data.db.dao
 
 import androidx.paging.PagingSource
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -9,6 +10,10 @@ import androidx.room.Update
 import com.example.financetracker.data.model.Transaction
 import kotlinx.coroutines.flow.Flow
 
+data class CategoryExpense(
+    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "total") val total: Double
+)
 @Dao
 interface TransactionDao {
     //basic operations
