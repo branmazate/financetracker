@@ -84,18 +84,6 @@ interface TransactionDao {
     @Query("UPDATE transactions SET accountId = :newAccountId WHERE accountId = :oldAccountId")
     suspend fun updateAccount(oldAccountId: Long, newAccountId: Long)
 
-    //Get monthly summary
-    @Query("""
-        SELECT strftime('%Y-%m', date/1000, 'unixepoch') AS month, 
-        SUM(amount) AS total
-        FROM transactions
-        WHERE type = :type
-        GROUP BY month
-        ORDER BY month DESC
-        LIMIT 12
-    """)
-    fun getMonthlySummary(type: String): Flow<Map<String, Double>>
-
     //Get monthly income
     @Query("""
         SELECT SUM(amount) 

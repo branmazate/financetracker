@@ -81,7 +81,7 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionDao.getMonthlyIncome()
     }
 
-    fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>> {
+    override suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>> {
         return transactionDao.getExpenseSummaryByCategory(start, end)
             .map { list: List<CategoryExpense> ->
                 list.associate { expense: CategoryExpense ->
@@ -98,4 +98,5 @@ interface TransactionRepository {
     suspend fun updateTransaction(transaction: Transaction)
     suspend fun getRecurringTransactions(): Flow<List<Transaction>>
     suspend fun getMonthlyIncome(): Double
+    suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>>
 }
