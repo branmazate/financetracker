@@ -1,6 +1,5 @@
 package com.example.financetracker.data.db.dao
 
-import androidx.paging.PagingSource
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
@@ -94,9 +93,6 @@ interface TransactionDao {
     """)
     suspend fun getMonthlyIncome(): Double
 
-    //Pagination
-    @Query("SELECT * FROM transactions ORDER BY date DESC")
-    fun getTransactionsPaged(): PagingSource<Int, Transaction>
 
     //Full-text search
     @Query("""SELECT * FROM transactions 

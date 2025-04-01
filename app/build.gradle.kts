@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android) apply true
     alias(libs.plugins.ksp)
 }
 
@@ -17,6 +18,27 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions{
+                arguments += mapOf(
+                    "room.schemaLocation" to "${projectDir}/schemas",
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
+                )
+            }
+        }
+    }
+
+    ksp {
+        arg("room.schemaLocation", "${projectDir}/schemas")
+        arg("me.tatarka.incremental", "true")
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("build/generated/ksp")
+        }
     }
 
     buildTypes {
@@ -50,7 +72,6 @@ dependencies {
     //Room Database
     implementation (libs.androidx.room.runtime)
     implementation(libs.androidx.paging.common.android)
-    implementation(libs.androidx.room.paging)
     implementation(libs.androidx.hilt.common)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.firebase.functions.ktx)
