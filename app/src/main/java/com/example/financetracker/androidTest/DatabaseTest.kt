@@ -9,6 +9,7 @@ import com.example.financetracker.data.db.dao.AccountDao
 import com.example.financetracker.data.db.dao.TransactionDao
 import com.example.financetracker.data.model.BankAccount
 import com.example.financetracker.data.model.Transaction
+import com.example.financetracker.data.model.TransactionType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -45,7 +46,7 @@ class DatabaseTest {
         val accountId = accountDao.insert(account)
 
         val transaction = Transaction(
-            type = Transaction.TransactionType.EXPENSE,
+            type = TransactionType.EXPENSE,
             amount = 50.0,
             date = Date(),
             category = "Food",
