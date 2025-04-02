@@ -10,7 +10,7 @@ class RecurrenceIntervalConverter {
     @TypeConverter
     fun toInterval(value: String?): RecurrenceInterval? {
         return value?.let{
-            RecurrenceInterval.valueOf(it)
+            enumValueOf<RecurrenceInterval>(it)
         }
     }
 }

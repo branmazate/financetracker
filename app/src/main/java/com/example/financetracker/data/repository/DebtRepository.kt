@@ -39,7 +39,6 @@ class DebtRepositoryImpl @Inject constructor(
     ) {
         if (!ValidationHelper.isValidDebt(
                 debt = debt,
-                totalAmount = totalAmount,
                 interestRate = interestRate
             )
         ) {

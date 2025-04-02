@@ -10,7 +10,7 @@ import com.example.financetracker.data.model.Transaction
 import kotlinx.coroutines.flow.Flow
 
 data class CategoryExpense(
-    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "categoryId") val categoryId: Long,
     @ColumnInfo(name = "total") val total: Double
 )
 @Dao
@@ -64,11 +64,11 @@ interface TransactionDao {
     ): Double
 
     @Query("""
-        SELECT category, SUM(amount) AS total
+        SELECT categoryId, SUM(amount) AS total
         FROM transactions
         WHERE type = 'EXPENSE'
         AND date BETWEEN :start AND :end
-        GROUP BY category
+        GROUP BY categoryId
     """)
     fun getExpenseSummaryByCategory(
         start: Long,
@@ -97,7 +97,7 @@ interface TransactionDao {
     //Full-text search
     @Query("""SELECT * FROM transactions 
         WHERE description LIKE '%' || :query || '%'
-        OR category LIKE '%' || :query || '%'
+        OR categoryId LIKE '%' || :query || '%'
         """)
     fun searchTransactions(query: String): Flow<List<Transaction>>
 

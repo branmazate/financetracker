@@ -34,6 +34,9 @@ android {
         arg("room.schemaLocation", "${projectDir}/schemas")
         arg("me.tatarka.incremental", "true")
     }
+    hilt{
+        enableAggregatingTask = false
+    }
 
     sourceSets {
         getByName("main") {

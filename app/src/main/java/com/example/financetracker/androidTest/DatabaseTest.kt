@@ -49,7 +49,7 @@ class DatabaseTest {
             type = TransactionType.EXPENSE,
             amount = 50.0,
             date = Date(),
-            category = "Food",
+            categoryId = 1,
             accountId = accountId,
         )
         transactionDao.insert(transaction)

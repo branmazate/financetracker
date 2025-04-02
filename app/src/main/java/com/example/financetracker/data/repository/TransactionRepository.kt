@@ -25,23 +25,15 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override suspend fun addTransaction(transaction: Transaction) = withContext(ioDispatcher)
     {
-        if (ValidationHelper.isValidTransaction(transaction)){
-            val transactionId = transactionDao.insert(transaction)
+        ValidationHelper.isValidTransaction(transaction)
+        val transactionId = transactionDao.insert(transaction)
+        val amount = when (transaction.type) {
+            TransactionType.INCOME -> transaction.amount
+            TransactionType.EXPENSE -> transaction.amount
+        }
 
-            //Update balance of the associated account
-            val amount = when (transaction.type) {
-                TransactionType.INCOME -> transaction.amount
-                TransactionType.EXPENSE -> transaction.amount
-            }
-
-            accountDao.updateBalance(transaction.accountId, amount)
-
-            //Handle recurrent transactions
-            if(transaction.recurring) {
-                scheduleRecurringTransaction(transaction)
-            }
-        } else {
-            throw IllegalArgumentException("Invalid transaction")
+        if (transaction.recurring){
+            scheduleRecurringTransaction(transaction)
         }
     }
 
@@ -85,7 +77,7 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionDao.getExpenseSummaryByCategory(start, end)
             .map { list: List<CategoryExpense> ->
                 list.associate { expense: CategoryExpense ->
-                    expense.category to expense.total
+                    expense.categoryId.toString() to expense.total
                 }
             }
     }
