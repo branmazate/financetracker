@@ -19,6 +19,10 @@ class TransactionRepositoryImpl @Inject constructor(
     private val accountDao: AccountDao,
     private val ioDispatcher: CoroutineContext
 ) : TransactionRepository {
+
+    override suspend fun deleteTransaction(transaction: Transaction){
+        transactionDao.delete(transaction)
+    }
     override fun getAllTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransactions()
     }
@@ -53,7 +57,7 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionDao.getExpenseSummaryByCategory(startOfMonth, endOfMonth)
     }
 
-    private fun scheduleRecurringTransaction(original:Transaction){
+    private fun scheduleRecurringTransaction(transaction: Transaction){
         //TODO Logic to schedule recurring transactions
     }
 
@@ -88,6 +92,7 @@ interface TransactionRepository {
     suspend fun addTransaction(transaction: Transaction)
     fun getMonthlyExpenseReport(): Flow<List<CategoryExpense>>
     suspend fun updateTransaction(transaction: Transaction)
+    suspend fun deleteTransaction(transaction: Transaction)
     suspend fun getRecurringTransactions(): Flow<List<Transaction>>
     suspend fun getMonthlyIncome(): Double
     suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>>
