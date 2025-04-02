@@ -77,4 +77,12 @@ interface AccountDao {
         WHERE id = :accountId
     """)
     suspend fun getAccountById(accountId: Long): BankAccount
+
+    //Get total accounts balance of checking and cash accounts
+    @Query("""
+        SELECT SUM(balance) FROM  bank_accounts
+        WHERE type IN ('CHECKING', 'CASH')
+    """)
+    fun getTotalCheckingAndCashBalance(): Flow<Double>
+
 }

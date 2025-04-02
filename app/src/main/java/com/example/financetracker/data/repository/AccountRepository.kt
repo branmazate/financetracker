@@ -55,6 +55,12 @@ class AccountRepositoryImpl @Inject constructor(
             )
         )
     }
+
+    //Function to get the total balance from cash and checking accounts
+    //TODO substitute with a more versatile function to get the balance of every account type
+    override fun getTotalBalanceFromCashAndCheckingAccounts(): Flow<Double> {
+        return accountDao.getTotalCheckingAndCashBalance()
+    }
 }
 
 interface AccountRepository {
@@ -64,4 +70,5 @@ interface AccountRepository {
     suspend fun convertCurrency(accountId: Long, newCurrency: String, exchangeRate: Double)
     suspend fun getAccountBalance(accountId: Long):Double
     suspend fun updateBalance(accountId: Long, newBalance: Double)
+    fun getTotalBalanceFromCashAndCheckingAccounts(): Flow<Double>
 }

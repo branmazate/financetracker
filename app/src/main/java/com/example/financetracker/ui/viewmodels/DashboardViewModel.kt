@@ -17,5 +17,5 @@ class DashboardViewModel @Inject constructor(
     val expensesByCategory: Flow<List<CategoryExpense>> =
         transactionRepo.getExpensesTotalGroupedByCategory()
 
-    val currentBalance: Double = accountRepo.getTotalBalanceFromCashAndCheckingAccounts()
+    val currentBalance: Flow<Double> = accountRepo.getTotalBalanceFromCashAndCheckingAccounts()
 }

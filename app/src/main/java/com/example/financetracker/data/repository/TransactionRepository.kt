@@ -41,7 +41,7 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMonthlyExpenseReport(): Flow<List<CategoryExpense>> {
+    override fun getExpensesTotalGroupedByCategory(): Flow<List<CategoryExpense>> {
         val today = LocalDate.now()
         val startOfMonth = today
             .withDayOfMonth(1)
@@ -54,13 +54,12 @@ class TransactionRepositoryImpl @Inject constructor(
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
-        return transactionDao.getExpenseSummaryByCategory(startOfMonth, endOfMonth)
+        return transactionDao.getExpenseSummaryByCategory(start = startOfMonth, end = endOfMonth)
     }
 
     private fun scheduleRecurringTransaction(transaction: Transaction){
         //TODO Logic to schedule recurring transactions
     }
-
     override suspend fun getRecurringTransactions(): Flow<List<Transaction>> {
         return transactionDao.getRecurringTransactions()
     }
@@ -90,10 +89,10 @@ class TransactionRepositoryImpl @Inject constructor(
 interface TransactionRepository {
     fun getAllTransactions(): Flow<List<Transaction>>
     suspend fun addTransaction(transaction: Transaction)
-    fun getMonthlyExpenseReport(): Flow<List<CategoryExpense>>
     suspend fun updateTransaction(transaction: Transaction)
     suspend fun deleteTransaction(transaction: Transaction)
     suspend fun getRecurringTransactions(): Flow<List<Transaction>>
     suspend fun getMonthlyIncome(): Double
     suspend fun getExpenseSummary(start: Long, end: Long): Flow<Map<String, Double>>
+    fun getExpensesTotalGroupedByCategory(): Flow<List<CategoryExpense>>
 }
