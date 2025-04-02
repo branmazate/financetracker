@@ -5,29 +5,35 @@ import androidx.lifecycle.viewModelScope
 import com.example.financetracker.data.model.Transaction
 import com.example.financetracker.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TransactionViewModel @Inject constructor(
     private val repository: TransactionRepository
-): ViewModel() {
+) : ViewModel() {
 
-    val transactions = repository.getAllTransactions().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+    private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
+    val transactions: StateFlow<List<Transaction>> = _transactions.asStateFlow()
 
-    fun addTransaction(transaction: Transaction){
+    init {
+        loadTransactions()
+    }
+
+    private fun loadTransactions() {
         viewModelScope.launch {
-            try {
-                repository.addTransaction(transaction)
-            } catch(e: Exception) {
-                //TODO Logic for handle the exception
+            repository.getAllTransactions().collect {
+                _transactions.value = it
             }
+        }
+    }
+
+    fun addTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            repository.addTransaction(transaction)
         }
     }
 }
