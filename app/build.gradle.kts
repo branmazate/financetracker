@@ -72,6 +72,9 @@ dependencies {
     implementation (libs.androidx.activity.compose.v1101)
     implementation (libs.material3)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation (libs.androidx.compose.bom)
+    implementation ("androidx.navigation:navigation-compose:2.7.3")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
 
     //Room Database
     implementation (libs.androidx.room.runtime)

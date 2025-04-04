@@ -17,13 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.financetracker.data.model.Transaction
 import com.example.financetracker.data.model.TransactionType
 import com.example.financetracker.ui.viewmodels.TransactionViewModel
 import java.util.Date
 
 @Composable
-fun TransactionFormScreen(viewModel: TransactionViewModel) {
+fun TransactionFormScreen(navController: NavController, viewModel: TransactionViewModel) {
     var amount by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(TransactionType.INCOME) }

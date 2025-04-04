@@ -9,12 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
 import com.example.financetracker.data.model.BankAccount
 import com.example.financetracker.data.model.BankAccount.AccountType
 import com.example.financetracker.ui.viewmodels.AccountViewModel
 
 @Composable
-fun AccountFormScreen(viewModel: AccountViewModel) {
+fun AccountFormScreen(navController: NavController, viewModel: AccountViewModel) {
     var accountName by remember { mutableStateOf("") }
     var balance by remember { mutableStateOf("") }
 
