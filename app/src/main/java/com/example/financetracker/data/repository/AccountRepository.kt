@@ -15,11 +15,12 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun getAccountWithTransactions(accountId: Long): Flow<AccountWithTransactions> {
         return accountDao.getAccountWithTransactions(accountId)
     }
-    override suspend fun createAccount(account: BankAccount): Long {
+    override fun createAccount(account: BankAccount): Long {
         if (account.balance < 0 && account.type != BankAccount.AccountType.CREDIT_CARD) {
             throw IllegalArgumentException("Invalid balance for non-credit card account")
+        } else {
+            return accountDao.insert(account)
         }
-        return accountDao.insert(account)
     }
     override suspend fun convertCurrency(
         accountId: Long,
@@ -66,7 +67,7 @@ class AccountRepositoryImpl @Inject constructor(
 interface AccountRepository {
     fun getAllAccounts(): Flow<List<BankAccount>>
     suspend fun getAccountWithTransactions(accountId: Long): Flow<AccountWithTransactions>
-    suspend fun createAccount(account: BankAccount): Long
+    fun createAccount(account: BankAccount): Long
     suspend fun convertCurrency(accountId: Long, newCurrency: String, exchangeRate: Double)
     suspend fun getAccountBalance(accountId: Long):Double
     suspend fun updateBalance(accountId: Long, newBalance: Double)
