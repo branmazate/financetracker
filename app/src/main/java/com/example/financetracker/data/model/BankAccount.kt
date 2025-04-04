@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class BankAccount(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
-    val type: AccountType,
+    val type: AccountType = AccountType.CHECKING,
     var balance: Double,
     val currency: String = "USD",
     val lastUpdated: Long = System.currentTimeMillis()
